@@ -37,7 +37,7 @@ export default {
         
     },
     computed:{
-        
+
         languages(){
             if(this.item.original_language === 'en'){
                 return 'gb'
@@ -93,5 +93,6 @@ export default {
 }
 .myCard:hover .infos{
     visibility: visible;
+    overflow-y: auto;
 }
 </style>
