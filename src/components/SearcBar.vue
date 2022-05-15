@@ -6,7 +6,6 @@
 </template>
 
 <script>
-/* import {state} from '../store.js' */
 export default {
         name: 'SearcBar',
     data(){
@@ -15,9 +14,6 @@ export default {
         }
     },
     computed:{
-        /* mySearch(){
-            return state.search
-        } */
     },
     methods:{
         cerca(){
