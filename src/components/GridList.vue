@@ -1,33 +1,36 @@
 <template>
-  <div>
-      sono la grid list
-      <button @click="leggi">clicca</button>
-      {{myasearch}}
-  </div>
+    <section class="container">
+        <div class="row">
+            <single-elemnt :item="item" v-for="(item, index) in items" :key="index"/>
+        </div>
+    </section>
 </template>
 
 <script>
-import state from '../store.js'
+import SingleElemnt from './SingleElemnt.vue'
+
 export default {
     name: 'GridList',
-    data(){
-        return{
-         
-        }
+    components: {
+        SingleElemnt
     },
-    computed:{
-        myasearch(){
-            return state.search   
-        }
+    props:{
+        items: Array
+        },
+    data(){
+        
     },
     methods:{
-        leggi(){
-            state.search = "leggi"
-        }
+    
+    },
+    computed:{
+        
     }
 }
 </script>
 
-<style>
-
+<style lang="scss">
+.grid {
+    display: flex;
+}
 </style>

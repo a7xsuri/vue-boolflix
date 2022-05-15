@@ -1,31 +1,19 @@
 <template>
   <div id="app">
     <header>
-      <SearcBar @perfomSearch="search"/>
-      <h1 class="display-6">Boolflix</h1>
+      <searc-bar @performSearch="search"/>
     </header>
     <main>
-      <GridList/>
-      <button @click="getMovies">carica</button>
-      <ul>
-        <li v-for="(movie) in movies" :key="movie.id">
-          id: {{movie.id}}<br/>
-          titolo originale: {{movie.original_title}}<br/>
-          titolo: {{movie.title}}<br/>
-          lingua: {{movie.original_language}}<br/>
-          voto: {{movie.vote_average}}<br/>
-        </li>
-      </ul>
+      <grid-list :items="movies" :loader="loading"/>
+      <grid-list :items="tvSeries" :loader="loading"/>
     </main>
-    
   </div>
 </template>
 
 <script>
-import SearcBar from './components/SearcBar.vue';
-import GridList from './components/GridList.vue';
+import GridList from './components/GridList.vue'
+import SearcBar from './components/SearcBar.vue'
 import axios from 'axios'
-
 export default {
   name: 'App',
   components: {
@@ -34,31 +22,50 @@ export default {
   },
   data(){
     return{
-      apiKey:"e0a53276ef6f7cc6f535a6ada53d5b7d",
+      apiKey: 'e0a53276ef6f7cc6f535a6ada53d5b7d',
       apiPath: 'https://api.themoviedb.org/3/search/',
-      movies:[]
+      movies:[],
+      itemsList:[],
+      tvSeries:[],
+      loading: false,
     }
   },
-  methods:{
-    getMovies(queryParams){
-      axios.get(this.apiPath+'movie', queryParams).then((res)=>{
-      this.movies = res.data.results;  
-      })
-    },
+  methods: {
     search(text){
       const queryParams = {
         params:{
           api_key: this.apiKey,
-          query: text
+          query: text,
         }
       }
-      this.getMovies(queryParams)
-    }
+      this.loading = true;
+      this.getAll(queryParams)
+    },
+    getSeries(queryParams){
+      return axios.get(this.apiPath+'tv', queryParams)
+    },
+    getMovies(queryParams){
+      return axios.get(this.apiPath+'movie', queryParams)
+    },
+    getAll(queryParams){
+      Promise.all([this.getMovies(queryParams), this.getSeries(queryParams)]).then((res)=> {
+        this.movies = res[0].data.results;
+        this.tvSeries = res[1].data.results;
+      }).catch((error)=>{
+        console.log(error);
+      })
+    },
   }
 }
 </script>
 
 <style lang="scss">
-@import './style/general.scss';
-@import './style/general.scss';
+@import './style/general.scss'; 
+header {
+  background-color: $bgColor;
+  height: 70px;
+}
+body {
+  background-color: $bgColor;
+}
 </style>
